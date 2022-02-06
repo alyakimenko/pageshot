@@ -1,0 +1,60 @@
+run:
+  timeout: 5m
+
+linters:
+  enable-all: true
+  disable:
+    - gochecknoglobals
+    - gomoddirectives
+    - maligned
+    - gci
+    - exhaustivestruct
+    - exhaustive
+    - golint
+    - gofumpt
+    - goimports
+    - wrapcheck
+    - wsl
+    - scopelint
+    - interfacer
+    - tagliatelle
+
+linters-settings:
+  gomnd:
+    settings:
+      mnd:
+        checks:
+          - case
+          - condition
+          - return
+
+  funlen:
+    lines: 100
+    statements: 50
+
+  cyclop:
+    max-complexity: 15
+
+issues:
+  exclude-rules:
+    - path: .
+      linters:
+        - varnamelen
+        - ireturn
+    - path: _test
+      linters:
+        - bodyclose
+        - lll
+        - goerr113
+        - gomnd
+        - funlen
+        - gocognit
+        - testpackage
+        - paralleltest
+        - noctx
+        - dupl
+        - goconst
+        - revive
+        - stylecheck
+        - contextcheck
+        - cyclop

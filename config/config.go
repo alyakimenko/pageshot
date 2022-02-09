@@ -2,6 +2,7 @@
 package config
 
 import (
+	"net"
 	"time"
 
 	"github.com/kelseyhightower/envconfig"
@@ -16,7 +17,6 @@ type Config struct {
 
 // ServerConfig holds HTTP server related configurable values.
 type ServerConfig struct {
-	Host         string        `default:"localhost"`
 	Port         string        `default:"8000"`
 	ReadTimeout  time.Duration `default:"10s" split_words:"true"`
 	WriteTimeout time.Duration `default:"5s" split_words:"true"`
@@ -25,7 +25,7 @@ type ServerConfig struct {
 
 // Addr returns server address in the format [host]:[port].
 func (sc ServerConfig) Addr() string {
-	return ":8000"
+	return net.JoinHostPort("", sc.Port)
 }
 
 // BrowserConfig holds browser related configurable values.

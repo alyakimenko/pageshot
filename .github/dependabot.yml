@@ -6,15 +6,23 @@ updates:
       interval: "daily"
     labels:
       - "dependencies"
+    reviewers:
+      - alyakimenko
+
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
       interval: "daily"
     labels:
       - "dependencies"
+    reviewers:
+      - alyakimenko
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
     labels:
       - "dependencies"
+    reviewers:
+      - alyakimenko

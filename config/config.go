@@ -18,8 +18,8 @@ type Config struct {
 // ServerConfig holds HTTP server related configurable values.
 type ServerConfig struct {
 	Port         string        `default:"8000"`
-	ReadTimeout  time.Duration `default:"10s" split_words:"true"`
-	WriteTimeout time.Duration `default:"5s" split_words:"true"`
+	ReadTimeout  time.Duration `default:"5s" split_words:"true"`
+	WriteTimeout time.Duration `default:"15s" split_words:"true"`
 	IdleTimeout  time.Duration `default:"5s" split_words:"true"`
 }
 

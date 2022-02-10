@@ -7,7 +7,7 @@ permissions:
   pull-requests: read
 
 jobs:
-  golangci:
+  hadolint:
     name: lint
     runs-on: ubuntu-latest
     steps:

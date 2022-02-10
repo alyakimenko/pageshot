@@ -4,13 +4,19 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/alyakimenko/pageshot/models"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
 
+const (
+	// v1PathPrefix is a path prefix that is used for v1 routes.
+	v1PathPrefix = "v1"
+)
+
 // ScreenshotService is a screenshot interface that is required for the Handler.
 type ScreenshotService interface {
-	Screenshot(ctx context.Context, url string) ([]byte, error)
+	Screenshot(ctx context.Context, opts models.ScreenshotOptions) ([]byte, string, error)
 }
 
 // Handler is an HTTP handler for v1 routes.
@@ -42,7 +48,7 @@ func NewHandler(params HandlerParams) *Handler {
 		ScreenshotService: params.ScreenshotService,
 	}
 
-	group := handler.engine.Group("v1")
+	group := handler.engine.Group(v1PathPrefix)
 	handler.initRoutes(group)
 
 	return handler
@@ -56,25 +62,4 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // initRoutes initializes all routes for the Handler.
 func (h *Handler) initRoutes(group *gin.RouterGroup) {
 	group.GET("/screenshot", h.screenshot)
-}
-
-// screenshot is an HTTP handler for GET /screenshot route.
-func (h *Handler) screenshot(c *gin.Context) {
-	url := c.Query("url")
-	if url == "" {
-		c.Status(http.StatusBadRequest)
-
-		return
-	}
-
-	image, err := h.ScreenshotService.Screenshot(c, url)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-
-		return
-	}
-
-	c.Data(http.StatusOK, "image/png", image)
 }

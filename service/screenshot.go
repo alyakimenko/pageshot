@@ -1,10 +1,14 @@
 package service
 
-import "context"
+import (
+	"context"
+
+	"github.com/alyakimenko/pageshot/models"
+)
 
 // Browser is a browser interface that is required for the ScreenshotService.
 type Browser interface {
-	Screenshot(ctx context.Context, url string) ([]byte, error)
+	Screenshot(ctx context.Context, opts models.ScreenshotOptions) ([]byte, string, error)
 }
 
 // ScreenshotService deals with screenshots related logic.
@@ -25,6 +29,6 @@ func NewScreenshotService(params ScreenshotServiceParams) *ScreenshotService {
 }
 
 // Screenshot takes a screenshot via the underlying Browser.
-func (s *ScreenshotService) Screenshot(ctx context.Context, url string) ([]byte, error) {
-	return s.browser.Screenshot(ctx, url)
+func (s *ScreenshotService) Screenshot(ctx context.Context, opts models.ScreenshotOptions) ([]byte, string, error) {
+	return s.browser.Screenshot(ctx, opts)
 }

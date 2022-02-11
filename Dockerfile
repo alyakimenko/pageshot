@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 # build stage
-FROM golang:1.17.6-alpine3.15 as builder
+FROM golang:1.17.7-alpine3.15 as builder
 
 # set workdir
 WORKDIR /src/pageshot

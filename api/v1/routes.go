@@ -1,3 +1,4 @@
+// Package v1 implements the v1 of the pageshot's REST API.
 package v1
 
 import (

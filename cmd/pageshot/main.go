@@ -9,11 +9,11 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/alyakimenko/pageshot/api"
+	v1 "github.com/alyakimenko/pageshot/api/v1"
 	"github.com/alyakimenko/pageshot/browser"
 	"github.com/alyakimenko/pageshot/config"
 	"github.com/alyakimenko/pageshot/logger"
-	"github.com/alyakimenko/pageshot/server"
-	v1 "github.com/alyakimenko/pageshot/server/v1"
 	"github.com/alyakimenko/pageshot/service"
 )
 
@@ -47,7 +47,7 @@ func main() {
 	})
 
 	// create HTTP server with the initialized v1 handler
-	server := server.NewServer(server.Params{
+	server := api.NewServer(api.Params{
 		Config:  config.Server,
 		Handler: handler,
 	})

@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	// maxQuality is a maximum allowed quality for screenshots.
+	// maxQuality is a maximum allowed quality level for screenshots.
 	maxQuality = 100
 
 	// defaultQuality is a default quality level for screenshots.
@@ -46,7 +46,7 @@ func (c *ChromeBrowser) Screenshot(ctx context.Context, opts models.ScreenshotOp
 	defer cancel()
 
 	var res []byte
-	if err := chromedp.Run(ctx, c.fullpageScreenshot(&res, opts)); err != nil {
+	if err := chromedp.Run(ctx, c.screenshot(&res, opts)); err != nil {
 		return nil, "", err
 	}
 
@@ -67,14 +67,16 @@ func (c *ChromeBrowser) allocateBrowser(ctx context.Context) (context.Context, c
 	return chromedp.NewExecAllocator(ctx, opts...)
 }
 
-// fullpageScreenshot takes a full screenshot with the specified image quality of the entire browser viewport.
-func (c *ChromeBrowser) fullpageScreenshot(res *[]byte, opts models.ScreenshotOptions) chromedp.Tasks {
+// fullpageScreenshot takes a screenshot with the specified screenshot options.
+func (c *ChromeBrowser) screenshot(res *[]byte, opts models.ScreenshotOptions) chromedp.Tasks {
 	var tasks chromedp.Tasks
+
 	if opts.Width != 0 && opts.Height != 0 {
 		tasks = append(tasks, chromedp.EmulateViewport(int64(opts.Width), int64(opts.Height)))
 	}
 
 	tasks = append(tasks, chromedp.Navigate(opts.URL))
+
 	if opts.Quality == 0 {
 		opts.Quality = defaultQuality
 	}

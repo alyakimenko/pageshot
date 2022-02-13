@@ -6,13 +6,7 @@ import (
 	"net/http"
 
 	"github.com/alyakimenko/pageshot/models"
-	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-)
-
-const (
-	// v1PathPrefix is a path prefix that is used for v1 routes.
-	v1PathPrefix = "v1"
 )
 
 // ScreenshotService is a screenshot interface that is required for the Handler.
@@ -22,10 +16,10 @@ type ScreenshotService interface {
 
 // Handler is an HTTP handler for v1 routes.
 type Handler struct {
-	engine *gin.Engine
+	mux *http.ServeMux
 
-	Logger            *logrus.Logger
-	ScreenshotService ScreenshotService
+	logger            *logrus.Logger
+	screenshotService ScreenshotService
 }
 
 // HandlerParams is an incoming params for the NewHandler function.
@@ -36,31 +30,33 @@ type HandlerParams struct {
 
 // NewHandler returns net http.Handler.
 func NewHandler(params HandlerParams) *Handler {
-	engine := gin.New()
-
-	engine.Use(
-		gin.Recovery(),
-	)
+	mux := http.NewServeMux()
 
 	handler := &Handler{
-		engine: engine,
-
-		Logger:            params.Logger,
-		ScreenshotService: params.ScreenshotService,
+		mux:               mux,
+		logger:            params.Logger,
+		screenshotService: params.ScreenshotService,
 	}
 
-	group := handler.engine.Group(v1PathPrefix)
-	handler.initRoutes(group)
+	handler.initRoutes()
 
 	return handler
 }
 
 // ServeHTTP satisfies the http.Handler interface.
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.engine.ServeHTTP(w, r)
+	h.mux.ServeHTTP(w, r)
 }
 
 // initRoutes initializes all routes for the Handler.
-func (h *Handler) initRoutes(group *gin.RouterGroup) {
-	group.GET("/screenshot", h.screenshot)
+func (h *Handler) initRoutes() {
+	h.mux.HandleFunc("/v1/screenshot", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+
+			return
+		}
+
+		h.screenshot(w, r)
+	})
 }

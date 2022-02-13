@@ -71,9 +71,20 @@ func (c *ChromeBrowser) allocateBrowser(ctx context.Context) (context.Context, c
 func (c *ChromeBrowser) screenshot(res *[]byte, opts models.ScreenshotOptions) chromedp.Tasks {
 	var tasks chromedp.Tasks
 
-	if opts.Width != 0 && opts.Height != 0 {
-		tasks = append(tasks, chromedp.EmulateViewport(int64(opts.Width), int64(opts.Height)))
+	if opts.Width == 0 {
+		opts.Width = c.width
 	}
+
+	if opts.Height == 0 {
+		opts.Height = c.height
+	}
+
+	tasks = append(tasks,
+		chromedp.EmulateViewport(
+			int64(opts.Width), int64(opts.Height),
+			chromedp.EmulateScale(float64(opts.Scale)/100),
+		),
+	)
 
 	tasks = append(tasks, chromedp.Navigate(opts.URL))
 

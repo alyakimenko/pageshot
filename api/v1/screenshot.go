@@ -4,43 +4,47 @@ import (
 	"net/http"
 
 	"github.com/alyakimenko/pageshot/models"
-	"github.com/gin-gonic/gin"
+	"github.com/gorilla/schema"
 )
 
 // screenshotRequest is an HTTP request model for the GET /v1/screenshot route.
 type screenshotRequest struct {
-	URL      string `form:"url" binding:"required"`
-	Width    int    `form:"width"`
-	Height   int    `form:"height"`
-	Quality  int    `form:"quality"`
-	Fullpage bool   `form:"fullpage"`
+	URL      string `schema:"url,required"`
+	Width    int    `schema:"width"`
+	Height   int    `schema:"height"`
+	Quality  int    `schema:"quality"`
+	Fullpage bool   `schema:"fullpage"`
+	Scale    int    `schema:"scale"`
 }
 
 // screenshot is an HTTP handler for GET /v1/screenshot route.
-func (h *Handler) screenshot(c *gin.Context) {
+func (h *Handler) screenshot(w http.ResponseWriter, r *http.Request) {
 	var req screenshotRequest
-	if err := c.ShouldBindQuery(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
+	if err := schema.NewDecoder().Decode(&req, r.URL.Query()); err != nil {
+		h.logger.Errorf("failed to decode query: %s", err.Error())
+		w.WriteHeader(http.StatusBadRequest)
 
 		return
 	}
 
-	image, contentType, err := h.ScreenshotService.Screenshot(c, models.ScreenshotOptions{
+	image, contentType, err := h.screenshotService.Screenshot(r.Context(), models.ScreenshotOptions{
 		URL:      req.URL,
 		Width:    req.Width,
 		Height:   req.Height,
 		Quality:  req.Quality,
 		Fullpage: req.Fullpage,
+		Scale:    req.Scale,
 	})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
+		h.logger.Errorf("failed to take a screenshot: %s", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
 
 		return
 	}
 
-	c.Data(http.StatusOK, contentType, image)
+	w.Header().Set("Content-Type", contentType)
+	_, err = w.Write(image)
+	if err != nil {
+		h.logger.Errorf("failed to write response: %s", err.Error())
+	}
 }

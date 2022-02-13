@@ -13,4 +13,6 @@ type ScreenshotOptions struct {
 	Quality int
 	// (optional) If true full page screenshot will be took.
 	Fullpage bool
+	// (optional) Viewport scale factor.
+	Scale int
 }

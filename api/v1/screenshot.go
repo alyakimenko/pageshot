@@ -14,6 +14,7 @@ type screenshotRequest struct {
 	Height   int    `schema:"height"`
 	Quality  int    `schema:"quality"`
 	Fullpage bool   `schema:"fullpage"`
+	Scale    int    `schema:"scale"`
 }
 
 // screenshot is an HTTP handler for GET /v1/screenshot route.
@@ -32,6 +33,7 @@ func (h *Handler) screenshot(w http.ResponseWriter, r *http.Request) {
 		Height:   req.Height,
 		Quality:  req.Quality,
 		Fullpage: req.Fullpage,
+		Scale:    req.Scale,
 	})
 	if err != nil {
 		h.logger.Errorf("failed to take a screenshot: %s", err.Error())

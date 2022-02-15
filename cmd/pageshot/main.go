@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"github.com/alyakimenko/pageshot/api"
 	v1 "github.com/alyakimenko/pageshot/api/v1"
@@ -47,7 +46,7 @@ func main() {
 	})
 
 	// create HTTP server with the initialized v1 handler
-	server := api.NewServer(api.Params{
+	server := api.NewServer(api.ServerParams{
 		Config:  config.Server,
 		Handler: handler,
 	})
@@ -65,12 +64,7 @@ func main() {
 
 	<-quit
 
-	const timeout = 5 * time.Second
-
-	ctx, shutdown := context.WithTimeout(context.Background(), timeout)
-	defer shutdown()
-
-	if err := server.Shutdown(ctx); err != nil {
+	if err := server.Shutdown(context.Background()); err != nil {
 		logger.Errorf("failed to stop server: %s\n", err.Error())
 	}
 }

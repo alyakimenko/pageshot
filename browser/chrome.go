@@ -3,6 +3,7 @@ package browser
 
 import (
 	"context"
+	"time"
 
 	"github.com/alyakimenko/pageshot/config"
 	"github.com/alyakimenko/pageshot/models"
@@ -90,6 +91,10 @@ func (c *ChromeBrowser) screenshot(res *[]byte, opts models.ScreenshotOptions) c
 
 	if opts.Quality == 0 {
 		opts.Quality = defaultQuality
+	}
+
+	if opts.Delay != 0 {
+		tasks = append(tasks, chromedp.Sleep(time.Duration(opts.Delay)*time.Millisecond))
 	}
 
 	if opts.Fullpage {

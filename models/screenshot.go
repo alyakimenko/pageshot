@@ -15,4 +15,6 @@ type ScreenshotOptions struct {
 	Fullpage bool
 	// (optional) Viewport scale factor.
 	Scale int
+	// (optional) Delay before taking a screenshot.
+	Delay int
 }

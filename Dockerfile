@@ -16,7 +16,7 @@ COPY . .
 RUN CGO_ENABLED=0 go build -o bin/pageshot cmd/pageshot/main.go
 
 # final image
-FROM chromedp/headless-shell:101.0.4919.0
+FROM chromedp/headless-shell:101.0.4929.5
 
 # update the apt-get lists, install ca-certificates, dumb-init, 
 # delete the apt-get lists and update ca-certificates

@@ -3,8 +3,8 @@ module github.com/alyakimenko/pageshot
 go 1.17
 
 require (
-	github.com/chromedp/cdproto v0.0.0-20220217222649-d8c14a5c6edf
-	github.com/chromedp/chromedp v0.7.8
+	github.com/chromedp/cdproto v0.0.0-20220321060548-7bc2623472b3
+	github.com/chromedp/chromedp v0.8.0
 	github.com/gorilla/schema v1.2.0
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/sirupsen/logrus v1.8.1

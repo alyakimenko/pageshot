@@ -18,6 +18,9 @@ RUN CGO_ENABLED=0 go build -o bin/pageshot cmd/pageshot/main.go
 # final image
 FROM chromedp/headless-shell:101.0.4951.7
 
+# set the default server's port
+ENV SERVER_PORT=8000
+
 # update the apt-get lists, install ca-certificates, dumb-init, 
 # delete the apt-get lists and update ca-certificates
 RUN apt-get update && apt-get install --no-install-recommends -y ca-certificates=20210119 dumb-init=1.2.5-1 \
@@ -32,7 +35,7 @@ WORKDIR /opt/pageshot
 COPY --from=builder /src/pageshot/bin/pageshot pageshot
 
 # expose port
-EXPOSE 8000/tcp
+EXPOSE ${SERVER_PORT}/tcp
 
 # set an entrypoint to dumb-init in order to reap zombie processes
 # https://github.com/chromedp/docker-headless-shell#using-as-a-base-image

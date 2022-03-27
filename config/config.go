@@ -2,36 +2,34 @@
 package config
 
 import (
-	"net"
+	"fmt"
 	"time"
-
-	"github.com/kelseyhightower/envconfig"
 )
 
 // Config holds all configurable values for the app.
 type Config struct {
-	Server  ServerConfig  `split_words:"true"`
-	Browser BrowserConfig `split_words:"true"`
-	Logger  LoggerConfig  `split_words:"true"`
+	Server  ServerConfig
+	Browser BrowserConfig
+	Logger  LoggerConfig
 }
 
 // ServerConfig holds HTTP server related configurable values.
 type ServerConfig struct {
-	Port         string        `default:"8000"`
-	ReadTimeout  time.Duration `default:"5s" split_words:"true"`
-	WriteTimeout time.Duration `default:"15s" split_words:"true"`
-	IdleTimeout  time.Duration `default:"5s" split_words:"true"`
+	Port         int
+	ReadTimeout  time.Duration
+	WriteTimeout time.Duration
+	IdleTimeout  time.Duration
 }
 
 // Addr returns server address in the format [host]:[port].
 func (sc ServerConfig) Addr() string {
-	return net.JoinHostPort("", sc.Port)
+	return fmt.Sprintf(":%d", sc.Port)
 }
 
 // BrowserConfig holds browser related configurable values.
 type BrowserConfig struct {
-	Width  int `default:"1440"`
-	Height int `default:"900"`
+	Width  int
+	Height int
 }
 
 // LoggerConfig holds logger related configurable values.
@@ -40,11 +38,20 @@ type LoggerConfig struct {
 }
 
 // NewConfig initializes new Config based on the environmental variables.
-func NewConfig() (Config, error) {
-	var config Config
-	if err := envconfig.Process("", &config); err != nil {
-		return Config{}, err
+func NewConfig() Config {
+	return Config{
+		Server: ServerConfig{
+			Port:         envInt("SERVER_PORT", 8000),
+			ReadTimeout:  envDuration("SERVER_READ_TIMEOUT", 5*time.Second),
+			WriteTimeout: envDuration("SERVER_WRITE_TIMEOUT", 15*time.Second),
+			IdleTimeout:  envDuration("SERVER_IDLE_TIMEOUT", 5*time.Second),
+		},
+		Browser: BrowserConfig{
+			Width:  envInt("BROWSER_WIDTH", 1440),
+			Height: envInt("BROWSER_HEIGHT", 900),
+		},
+		Logger: LoggerConfig{
+			Level: envString("LOGGER_LEVEL", "INFO"),
+		},
 	}
-
-	return config, nil
 }

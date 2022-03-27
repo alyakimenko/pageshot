@@ -18,10 +18,7 @@ import (
 
 func main() {
 	// init global config
-	config, err := config.NewConfig()
-	if err != nil {
-		panic(err)
-	}
+	config := config.NewConfig()
 
 	// init logger
 	logger, err := logger.NewLogrusLogger(config.Logger)

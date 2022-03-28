@@ -8,12 +8,12 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/alyakimenko/pageshot/api"
-	v1 "github.com/alyakimenko/pageshot/api/v1"
 	"github.com/alyakimenko/pageshot/browser"
 	"github.com/alyakimenko/pageshot/config"
 	"github.com/alyakimenko/pageshot/logger"
 	"github.com/alyakimenko/pageshot/service"
+	"github.com/alyakimenko/pageshot/storage/local"
+	"github.com/alyakimenko/pageshot/transport/rest"
 )
 
 func main() {
@@ -31,19 +31,25 @@ func main() {
 		Config: config.Browser,
 	})
 
+	// init storage
+	localStorage := local.NewStorage(local.StorageParams{
+		Config: config.Storage,
+	})
+
 	// create screenshot service with the browser
 	screenshotService := service.NewScreenshotService(service.ScreenshotServiceParams{
-		Browser: chromeBrowser,
+		Browser:     chromeBrowser,
+		FileStorage: localStorage,
 	})
 
 	// init v1 HTTP handler
-	handler := v1.NewHandler(v1.HandlerParams{
+	handler := rest.NewHandler(rest.HandlerParams{
 		Logger:            logger,
 		ScreenshotService: screenshotService,
 	})
 
 	// create HTTP server with the initialized v1 handler
-	server := api.NewServer(api.ServerParams{
+	server := rest.NewServer(rest.ServerParams{
 		Config:  config.Server,
 		Handler: handler,
 	})

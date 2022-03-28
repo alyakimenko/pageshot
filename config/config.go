@@ -2,7 +2,7 @@
 package config
 
 import (
-	"fmt"
+	"os"
 	"time"
 )
 
@@ -10,31 +10,8 @@ import (
 type Config struct {
 	Server  ServerConfig
 	Browser BrowserConfig
+	Storage StorageConfig
 	Logger  LoggerConfig
-}
-
-// ServerConfig holds HTTP server related configurable values.
-type ServerConfig struct {
-	Port         int
-	ReadTimeout  time.Duration
-	WriteTimeout time.Duration
-	IdleTimeout  time.Duration
-}
-
-// Addr returns server address in the format [host]:[port].
-func (sc ServerConfig) Addr() string {
-	return fmt.Sprintf(":%d", sc.Port)
-}
-
-// BrowserConfig holds browser related configurable values.
-type BrowserConfig struct {
-	Width  int
-	Height int
-}
-
-// LoggerConfig holds logger related configurable values.
-type LoggerConfig struct {
-	Level string `default:"INFO"`
 }
 
 // NewConfig initializes new Config based on the environmental variables.
@@ -49,6 +26,10 @@ func NewConfig() Config {
 		Browser: BrowserConfig{
 			Width:  envInt("BROWSER_WIDTH", 1440),
 			Height: envInt("BROWSER_HEIGHT", 900),
+		},
+		Storage: StorageConfig{
+			Type:      envStorageType("STORAGE_TYPE", "local"),
+			Directory: envString("STORAGE_DIRECTORY", os.TempDir()),
 		},
 		Logger: LoggerConfig{
 			Level: envString("LOGGER_LEVEL", "INFO"),

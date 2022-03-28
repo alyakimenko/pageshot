@@ -45,3 +45,18 @@ func envDuration(name string, defaultValue time.Duration) time.Duration {
 
 	return parsedValue
 }
+
+// envStorageType parses StorageType environment variable.
+func envStorageType(name string, defaultValue StorageType) StorageType {
+	value := os.Getenv(name)
+	if value == "" {
+		return defaultValue
+	}
+
+	parsedValue := StorageType(value)
+	if !parsedValue.IsValid() {
+		return defaultValue
+	}
+
+	return parsedValue
+}

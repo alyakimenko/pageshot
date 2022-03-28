@@ -18,9 +18,6 @@ const (
 	// defaultQuality is a default quality level for screenshots.
 	// This value will be used if a custom value is not provided.
 	defaultQuality = 70
-
-	// defaultImageFormat is a default format for screenshot images.
-	defaultImageFormat = models.PNGImageFormat
 )
 
 // ChromeBrowser operates Chrome browser logic.
@@ -43,7 +40,7 @@ func NewChromeBrowser(params ChromeBrowserParams) *ChromeBrowser {
 }
 
 // Screenshot takes a screenshot based on the provided parameters.
-func (c *ChromeBrowser) Screenshot(ctx context.Context, opts models.ScreenshotOptions) ([]byte, string, error) {
+func (c *ChromeBrowser) Screenshot(ctx context.Context, opts models.ScreenshotOptions) ([]byte, error) {
 	allocCtx, cancel := c.allocateBrowser(ctx)
 	defer cancel()
 
@@ -63,7 +60,7 @@ func (c *ChromeBrowser) allocateBrowser(ctx context.Context) (context.Context, c
 }
 
 // fullpageScreenshot takes a screenshot with the specified screenshot options.
-func (c *ChromeBrowser) screenshot(ctx context.Context, opts models.ScreenshotOptions) ([]byte, string, error) {
+func (c *ChromeBrowser) screenshot(ctx context.Context, opts models.ScreenshotOptions) ([]byte, error) {
 	var tasks chromedp.Tasks
 
 	if opts.Width == 0 {
@@ -87,10 +84,6 @@ func (c *ChromeBrowser) screenshot(ctx context.Context, opts models.ScreenshotOp
 		opts.Quality = defaultQuality
 	}
 
-	if !opts.Format.IsValid() {
-		opts.Format = defaultImageFormat
-	}
-
 	if opts.Delay != 0 {
 		tasks = append(tasks, chromedp.Sleep(time.Duration(opts.Delay)*time.Millisecond))
 	}
@@ -103,10 +96,10 @@ func (c *ChromeBrowser) screenshot(ctx context.Context, opts models.ScreenshotOp
 	}
 
 	if err := chromedp.Run(ctx, tasks); err != nil {
-		return nil, "", err
+		return nil, err
 	}
 
-	return res, opts.Format.ContentType(), nil
+	return res, nil
 }
 
 // fullpageScreenshot takes a screenshot of an entire page.

@@ -12,6 +12,7 @@ import (
 	"github.com/alyakimenko/pageshot/config"
 	"github.com/alyakimenko/pageshot/logger"
 	"github.com/alyakimenko/pageshot/service"
+	"github.com/alyakimenko/pageshot/storage/local"
 	"github.com/alyakimenko/pageshot/transport/rest"
 )
 
@@ -30,9 +31,15 @@ func main() {
 		Config: config.Browser,
 	})
 
+	// init storage
+	localStorage := local.NewStorage(local.StorageParams{
+		Config: config.Storage,
+	})
+
 	// create screenshot service with the browser
 	screenshotService := service.NewScreenshotService(service.ScreenshotServiceParams{
-		Browser: chromeBrowser,
+		Browser:     chromeBrowser,
+		FileStorage: localStorage,
 	})
 
 	// init v1 HTTP handler

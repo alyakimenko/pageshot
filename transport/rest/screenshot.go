@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"io"
 	"net/http"
 
 	"github.com/alyakimenko/pageshot/models"
@@ -49,7 +50,7 @@ func (h *Handler) screenshot(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", contentType)
-	_, err = w.Write(image)
+	_, err = io.Copy(w, image)
 	if err != nil {
 		h.logger.Errorf("failed to write response: %s", err.Error())
 	}

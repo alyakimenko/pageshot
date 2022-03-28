@@ -3,6 +3,7 @@ package rest
 
 import (
 	"context"
+	"io"
 	"net/http"
 
 	"github.com/alyakimenko/pageshot/models"
@@ -11,7 +12,7 @@ import (
 
 // ScreenshotService is a screenshot interface that is required for the Handler.
 type ScreenshotService interface {
-	Screenshot(ctx context.Context, opts models.ScreenshotOptions) ([]byte, string, error)
+	Screenshot(ctx context.Context, opts models.ScreenshotOptions) (io.Reader, string, error)
 }
 
 // Handler is an HTTP handler for v1 routes.

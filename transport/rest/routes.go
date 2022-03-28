@@ -1,5 +1,5 @@
-// Package v1 implements the v1 of the pageshot's REST API.
-package v1
+// Package rest implements the pageshot's REST API.
+package rest
 
 import (
 	"context"
@@ -50,7 +50,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // initRoutes initializes all routes for the Handler.
 func (h *Handler) initRoutes() {
-	h.mux.HandleFunc("/v1/screenshot", func(w http.ResponseWriter, r *http.Request) {
+	h.mux.HandleFunc("/screenshot", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 

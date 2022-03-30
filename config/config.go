@@ -28,8 +28,17 @@ func NewConfig() Config {
 			Height: envInt("BROWSER_HEIGHT", 900),
 		},
 		Storage: StorageConfig{
-			Type:      envStorageType("STORAGE_TYPE", "local"),
-			Directory: envString("STORAGE_DIRECTORY", os.TempDir()),
+			Type: envStorageType("STORAGE_TYPE", ""),
+			Local: LocalStorageConfig{
+				Directory: envString("STORAGE_LOCAL_DIRECTORY", os.TempDir()),
+			},
+			S3: S3StorageConfig{
+				Bucket:          envString("STORAGE_S3_BUCKET", ""),
+				Endpoint:        envString("STORAGE_S3_ENDPOINT", ""),
+				AccessKeyID:     envString("STORAGE_S3_ACCESS_KEY_ID", ""),
+				SecretAccessKey: envString("STORAGE_S3_SECRET_ACCESS_KEY", ""),
+				SSL:             envBool("STORAGE_S3_SSL", false),
+			},
 		},
 		Logger: LoggerConfig{
 			Level: envString("LOGGER_LEVEL", "INFO"),

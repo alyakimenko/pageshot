@@ -60,3 +60,18 @@ func envStorageType(name string, defaultValue StorageType) StorageType {
 
 	return parsedValue
 }
+
+// envBool parses bool environment variable.
+func envBool(name string, defaultValue bool) bool {
+	value := os.Getenv(name)
+	if value == "" {
+		return defaultValue
+	}
+
+	parsedValue, err := strconv.ParseBool(value)
+	if err != nil {
+		return defaultValue
+	}
+
+	return parsedValue
+}

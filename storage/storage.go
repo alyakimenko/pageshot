@@ -4,6 +4,8 @@ import "io"
 
 // UploadInput is an input model for uploading files.
 type UploadInput struct {
-	Filename string
-	File     io.Reader
+	Filename    string
+	File        io.Reader
+	FileSize    int64
+	ContentType string
 }

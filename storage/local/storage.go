@@ -19,7 +19,7 @@ type Storage struct {
 
 // StorageParams is an incoming params for the NewStorage function.
 type StorageParams struct {
-	Config config.StorageConfig
+	Config config.LocalStorageConfig
 }
 
 // NewStorage creates new instance of the Storage.

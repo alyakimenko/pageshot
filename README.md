@@ -41,7 +41,7 @@ Pageshot is a simple self-hosted tool that enables you to take a screenshot of a
 
 Config is based on environmental variables.
 
-| Param                          |    Type    |                                       Description                                       |    Default    |
+| Environmental variable         |    Type    |                                       Description                                       |    Default    |
 | :----------------------------- | :--------: | :-------------------------------------------------------------------------------------: | :-----------: |
 | `SERVER_PORT`                  |   `int`    |                                      Server's port                                      |     8000      |
 | `SERVER_READ_TIMEOUT`          | `duration` |         Is maximum duration for reading the entire request, including the body          |      5s       |

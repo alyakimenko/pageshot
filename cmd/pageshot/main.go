@@ -13,33 +13,45 @@ import (
 	"github.com/alyakimenko/pageshot/logger"
 	"github.com/alyakimenko/pageshot/service"
 	"github.com/alyakimenko/pageshot/storage/local"
+	"github.com/alyakimenko/pageshot/storage/s3"
 	"github.com/alyakimenko/pageshot/transport/rest"
 )
 
 func main() {
 	// init global config
-	config := config.NewConfig()
+	cfg := config.NewConfig()
 
 	// init logger
-	logger, err := logger.NewLogrusLogger(config.Logger)
+	logger, err := logger.NewLogrusLogger(cfg.Logger)
 	if err != nil {
 		panic(err)
 	}
 
 	// init browser
 	chromeBrowser := browser.NewChromeBrowser(browser.ChromeBrowserParams{
-		Config: config.Browser,
+		Config: cfg.Browser,
 	})
 
 	// init storage
-	localStorage := local.NewStorage(local.StorageParams{
-		Config: config.Storage,
-	})
+	var storage service.FileStorage
+	switch cfg.Storage.Type {
+	case config.S3StorageType:
+		storage, err = s3.NewStorage(s3.StorageParams{
+			Config: cfg.Storage.S3,
+		})
+		if err != nil {
+			panic(err)
+		}
+	case config.LocalStorageType:
+		storage = local.NewStorage(local.StorageParams{
+			Config: cfg.Storage.Local,
+		})
+	}
 
 	// create screenshot service with the browser
 	screenshotService := service.NewScreenshotService(service.ScreenshotServiceParams{
 		Browser:     chromeBrowser,
-		FileStorage: localStorage,
+		FileStorage: storage,
 	})
 
 	// init v1 HTTP handler
@@ -50,7 +62,7 @@ func main() {
 
 	// create HTTP server with the initialized v1 handler
 	server := rest.NewServer(rest.ServerParams{
-		Config:  config.Server,
+		Config:  cfg.Server,
 		Handler: handler,
 	})
 

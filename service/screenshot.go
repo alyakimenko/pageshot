@@ -46,6 +46,10 @@ func NewScreenshotService(params ScreenshotServiceParams) *ScreenshotService {
 
 // Screenshot takes a screenshot via the underlying Browser and uploads the resulting image to Storage.
 func (s *ScreenshotService) Screenshot(ctx context.Context, opts models.ScreenshotOptions) (io.Reader, string, error) {
+	if !opts.Format.IsValid() {
+		opts.Format = defaultImageFormat
+	}
+
 	if s.fileStorage == nil {
 		return s.screenshotWithoutUpload(ctx, opts)
 	}
@@ -53,10 +57,6 @@ func (s *ScreenshotService) Screenshot(ctx context.Context, opts models.Screensh
 	hash, err := opts.Hash()
 	if err != nil {
 		return nil, "", err
-	}
-
-	if !opts.Format.IsValid() {
-		opts.Format = defaultImageFormat
 	}
 
 	// construct a filename
@@ -83,8 +83,10 @@ func (s *ScreenshotService) Screenshot(ctx context.Context, opts models.Screensh
 	tee := io.TeeReader(bytes.NewReader(screenshot), &buf)
 
 	err = s.fileStorage.Upload(ctx, storage.UploadInput{
-		Filename: filename,
-		File:     tee,
+		Filename:    filename,
+		File:        tee,
+		FileSize:    int64(len(screenshot)),
+		ContentType: opts.Format.ContentType(),
 	})
 	if err != nil {
 		return nil, "", err

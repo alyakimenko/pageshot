@@ -12,16 +12,6 @@ Pageshot is a simple self-hosted tool that enables you to take a screenshot of a
 - Supports scale and quality factors.
 - Supports local file storage.
 
-## TODO
-
-- [ ] Screenshots by specific CSS selector.
-- [ ] Scroll entire webpage option.
-- [ ] Scroll to specific element option.
-- [ ] Custom User-Agent and others HTTP headers.
-- [ ] Proxy support.
-- [ ] Execute custom JavaScript before taking a screenshot.
-- [ ] Setup building, publishing, and deploying Docker images with Github Actions.
-
 ## API
 
 `GET /screenshot`

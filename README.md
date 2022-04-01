@@ -35,20 +35,20 @@ Pageshot is a simple self-hosted tool that enables you to take a screenshot of a
 
 Config is based on environmental variables.
 
-| Environmental variable         |    Type    |                                                            Description                                                            |    Default    |
-| :----------------------------- | :--------: | :-------------------------------------------------------------------------------------------------------------------------------: | :-----------: |
-| `SERVER_PORT`                  |   `int`    |                                                           Server's port                                                           |     8000      |
-| `SERVER_READ_TIMEOUT`          | `duration` |                              Is maximum duration for reading the entire request, including the body                               |      5s       |
-| `SERVER_WRITE_TIMEOUT`         | `duration` |                                 Is the maximum duration before timing out writes of the response                                  |      15s      |
-| `SERVER_IDLE_TIMEOUT`          | `duration` |                      Is the maximum amount of time to wait for the next request when keep-alives are enabled                      |      5s       |
-| `BROWSER_WIDTH`                |   `int`    |                                                 Initial browser's viewport width                                                  |     1440      |
-| `BROWSER_HEIGHT`               |   `int`    |                                                 Initial browser's viewport height                                                 |      900      |
-| `BROWSER_URL`                  |  `string`  | Remote browser's URL. If specified, pageshot will try to connect to a remote browser, otherwise will try to allocate a local one. |               |
-| `STORAGE_TYPE`                 |  `string`  |                                  Type of a storage. **local** and **s3** are currently allowed.                                   |               |
-| `STORAGE_LOCAL_DIRECTORY`      |  `string`  |                           Path to local storage directory. Applicable if **local** storage is selected.                           | temp dir path |
-| `STORAGE_S3_BUCKET`            |  `string`  |                                                            S3 bucket.                                                             |               |
-| `STORAGE_S3_ENDPOINT`          |  `string`  |                                                           S3 endpoint.                                                            |               |
-| `STORAGE_S3_ACCESS_KEY_ID`     |  `string`  |                                                         S3 Access Key ID.                                                         |               |
-| `STORAGE_S3_SECRET_ACCESS_KEY` |  `string`  |                                                       S3 Secret Access Key.                                                       |               |
-| `STORAGE_S3_SSL`               | `boolean`  |                                                      Use SSL for S3 storage.                                                      |     false     |
-| `LOGGER_LEVEL`                 |  `string`  |                                                          Logger's level.                                                          |     INFO      |
+| Environmental variable               |    Type    |                                                           Description                                                            |    Default    |
+| :----------------------------------- | :--------: | :------------------------------------------------------------------------------------------------------------------------------: | :-----------: |
+| `SERVER_PORT` or `PORT` (for Heroku) |   `int`    |                                                          Server's port                                                           |     8000      |
+| `SERVER_READ_TIMEOUT`                | `duration` |                               Maximum duration for reading the entire request, including the body                                |      5s       |
+| `SERVER_WRITE_TIMEOUT`               | `duration` |                                    Maximum duration before timing out writes of the response                                     |      15s      |
+| `SERVER_IDLE_TIMEOUT`                | `duration` |                         Maximum amount of time to wait for the next request when keep-alives are enabled                         |      5s       |
+| `BROWSER_WIDTH`                      |   `int`    |                                                 Initial browser's viewport width                                                 |     1440      |
+| `BROWSER_HEIGHT`                     |   `int`    |                                                Initial browser's viewport height                                                 |      900      |
+| `BROWSER_URL`                        |  `string`  | Remote browser's URL. If specified, pageshot will try to connect to a remote browser, otherwise will try to allocate a local one |               |
+| `STORAGE_TYPE`                       |  `string`  |                                  Type of a storage. **local** and **s3** are currently allowed                                   |               |
+| `STORAGE_LOCAL_DIRECTORY`            |  `string`  |                           Path to local storage directory. Applicable if **local** storage is selected                           | temp dir path |
+| `STORAGE_S3_BUCKET`                  |  `string`  |                                                            S3 bucket                                                             |               |
+| `STORAGE_S3_ENDPOINT`                |  `string`  |                                                           S3 endpoint                                                            |               |
+| `STORAGE_S3_ACCESS_KEY_ID`           |  `string`  |                                                         S3 Access Key ID                                                         |               |
+| `STORAGE_S3_SECRET_ACCESS_KEY`       |  `string`  |                                                       S3 Secret Access Key                                                       |               |
+| `STORAGE_S3_SSL`                     | `boolean`  |                                                      Use SSL for S3 storage                                                      |     false     |
+| `LOGGER_LEVEL`                       |  `string`  |                                                          Logger's level                                                          |     INFO      |

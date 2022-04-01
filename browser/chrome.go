@@ -63,6 +63,7 @@ func (c *ChromeBrowser) Screenshot(ctx context.Context, opts models.ScreenshotOp
 // allocateBrowser allocates new local chrome browser.
 func (c *ChromeBrowser) allocateLocalBrowser(ctx context.Context) (context.Context, context.CancelFunc) {
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],
+		chromedp.NoSandbox,
 		chromedp.WindowSize(c.width, c.height),
 	)
 

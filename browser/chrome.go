@@ -24,6 +24,7 @@ const (
 type ChromeBrowser struct {
 	width  int
 	height int
+	url    string
 }
 
 // ChromeBrowserParams is an incoming params for the NewChromeBrowser function.
@@ -36,12 +37,21 @@ func NewChromeBrowser(params ChromeBrowserParams) *ChromeBrowser {
 	return &ChromeBrowser{
 		width:  params.Config.Width,
 		height: params.Config.Height,
+		url:    params.Config.URL,
 	}
 }
 
 // Screenshot takes a screenshot based on the provided parameters.
 func (c *ChromeBrowser) Screenshot(ctx context.Context, opts models.ScreenshotOptions) ([]byte, error) {
-	allocCtx, cancel := c.allocateBrowser(ctx)
+	var allocCtx context.Context
+	var cancel context.CancelFunc
+
+	// try to connect to a remote browser, otherwise allocate a local one
+	if c.url != "" {
+		allocCtx, cancel = c.allocateRemoteBrowser(ctx, c.url)
+	} else {
+		allocCtx, cancel = c.allocateLocalBrowser(ctx)
+	}
 	defer cancel()
 
 	ctx, cancel = chromedp.NewContext(allocCtx)
@@ -50,13 +60,21 @@ func (c *ChromeBrowser) Screenshot(ctx context.Context, opts models.ScreenshotOp
 	return c.screenshot(ctx, opts)
 }
 
-// allocateBrowser allocates new chrome browser.
-func (c *ChromeBrowser) allocateBrowser(ctx context.Context) (context.Context, context.CancelFunc) {
+// allocateBrowser allocates new local chrome browser.
+func (c *ChromeBrowser) allocateLocalBrowser(ctx context.Context) (context.Context, context.CancelFunc) {
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],
 		chromedp.WindowSize(c.width, c.height),
 	)
 
 	return chromedp.NewExecAllocator(ctx, opts...)
+}
+
+// connectRemoteBrowser connects to a remote browser by the provided url.
+// The url should point to the browser's websocket address, such as "ws://127.0.0.1:$PORT/devtools/browser/...".
+// If the url does not contain "/devtools/browser/", it will try to detect
+// the correct one by sending a request to "http://$HOST:$PORT/json/version".
+func (c *ChromeBrowser) allocateRemoteBrowser(ctx context.Context, url string) (context.Context, context.CancelFunc) {
+	return chromedp.NewRemoteAllocator(ctx, url)
 }
 
 // fullpageScreenshot takes a screenshot with the specified screenshot options.

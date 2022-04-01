@@ -1,16 +1,20 @@
-# 📸 Pageshot
+<p align="center">
+<img
+    src="assets/logo.png"
+    width="350" height="112" border="0" alt="pageshot">
+</p>
 
 Pageshot is a simple self-hosted tool that enables you to take a screenshot of any webpage.
 
 ## Features
 
 - Containerized (browser is delivered within a Docker image).
-- Supports configured width and height.
-- Supports fullpage screenshots.
-- Supports delayed screenshots.
-- Supports three basic image formats (PNG, JPEG and WEBP).
-- Supports scale and quality factors.
-- Supports local file storage.
+- Configurable width and height parameters.
+- Ability to take a full page screenshot.
+- Support for a delayed screenshot.
+- Support for three output image formats (`PNG`, `JPEG` and `WEBP`).
+- Flexible scale and quality factors.
+- Cache screenshots with local file storage or S3.
 
 ## API
 
@@ -25,7 +29,7 @@ Pageshot is a simple self-hosted tool that enables you to take a screenshot of a
 | `format`   | `string` | Output image format (png, jpeg, webp)                     |     png      |
 | `quality`  |  `int`   | Output image quiality                                     |      70      |
 | `delay`    |  `int`   | Delay in milliseconds, to wait before taking a screenshot |      0       |
-| `fullpage` |  `bool`  | Capture full webpage screenshot                           |    false     |
+| `fullpage` |  `bool`  | Capture full page screenshot                              |    false     |
 
 ## Config
 

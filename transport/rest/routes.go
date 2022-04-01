@@ -5,6 +5,7 @@ import (
 	"context"
 	"io"
 	"net/http"
+	"time"
 
 	"github.com/alyakimenko/pageshot/models"
 	"github.com/sirupsen/logrus"
@@ -15,7 +16,7 @@ type ScreenshotService interface {
 	Screenshot(ctx context.Context, opts models.ScreenshotOptions) (io.Reader, string, error)
 }
 
-// Handler is an HTTP handler for v1 routes.
+// Handler is an REST HTTP handler.
 type Handler struct {
 	mux *http.ServeMux
 
@@ -59,5 +60,16 @@ func (h *Handler) initRoutes() {
 		}
 
 		h.screenshot(w, r)
+	})
+
+	start := time.Now()
+	h.mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+
+			return
+		}
+
+		h.health(start)(w, r)
 	})
 }

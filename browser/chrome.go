@@ -70,9 +70,7 @@ func (c *ChromeBrowser) allocateLocalBrowser(ctx context.Context) (context.Conte
 }
 
 // connectRemoteBrowser connects to a remote browser by the provided url.
-// The url should point to the browser's websocket address, such as "ws://127.0.0.1:$PORT/devtools/browser/...".
-// If the url does not contain "/devtools/browser/", it will try to detect
-// the correct one by sending a request to "http://$HOST:$PORT/json/version".
+// The url should point to the browser's websocket address.
 func (c *ChromeBrowser) allocateRemoteBrowser(ctx context.Context, url string) (context.Context, context.CancelFunc) {
 	return chromedp.NewRemoteAllocator(ctx, url)
 }

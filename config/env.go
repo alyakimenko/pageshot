@@ -31,6 +31,26 @@ func envInt(name string, defaultValue int) int {
 	return parsedValue
 }
 
+// envIntVariadic parses multiple int environment variables.
+// Grabs first non-empty environment variable.
+// If all of the provided environtment variables are empty, will use the defaultValue.
+func envIntMultiple(names []string, defaultValue int) int {
+	var value string
+	for _, name := range names {
+		value = os.Getenv(name)
+		if value != "" {
+			break
+		}
+	}
+
+	parsedValue, err := strconv.Atoi(value)
+	if err != nil {
+		return defaultValue
+	}
+
+	return parsedValue
+}
+
 // envDuration parses duration environment variable.
 func envDuration(name string, defaultValue time.Duration) time.Duration {
 	value := os.Getenv(name)

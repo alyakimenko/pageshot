@@ -18,7 +18,8 @@ type Config struct {
 func NewConfig() Config {
 	return Config{
 		Server: ServerConfig{
-			Port:         envInt("SERVER_PORT", 8000),
+			// PORT is for compatibility with Heroku
+			Port:         envIntMultiple([]string{"PORT", "SERVER_PORT"}, 8000),
 			ReadTimeout:  envDuration("SERVER_READ_TIMEOUT", 5*time.Second),
 			WriteTimeout: envDuration("SERVER_WRITE_TIMEOUT", 15*time.Second),
 			IdleTimeout:  envDuration("SERVER_IDLE_TIMEOUT", 5*time.Second),

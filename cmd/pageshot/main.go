@@ -54,13 +54,13 @@ func main() {
 		FileStorage: storage,
 	})
 
-	// init v1 HTTP handler
+	// init HTTP handler
 	handler := rest.NewHandler(rest.HandlerParams{
 		Logger:            logger,
 		ScreenshotService: screenshotService,
 	})
 
-	// create HTTP server with the initialized v1 handler
+	// create HTTP server with the initialized handler
 	server := rest.NewServer(rest.ServerParams{
 		Config:  cfg.Server,
 		Handler: handler,

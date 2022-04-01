@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/schema"
 )
 
-// screenshotRequest is an HTTP request model for the GET /v1/screenshot route.
+// screenshotRequest is an HTTP request model for the GET /screenshot route.
 type screenshotRequest struct {
 	URL      string             `schema:"url,required"`
 	Width    int                `schema:"width"`
@@ -20,7 +20,7 @@ type screenshotRequest struct {
 	Format   models.ImageFormat `schema:"format"`
 }
 
-// screenshot is an HTTP handler for GET /v1/screenshot route.
+// screenshot is an HTTP handler for GET /screenshot route.
 func (h *Handler) screenshot(w http.ResponseWriter, r *http.Request) {
 	var req screenshotRequest
 	if err := schema.NewDecoder().Decode(&req, r.URL.Query()); err != nil {

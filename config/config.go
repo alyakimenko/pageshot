@@ -26,6 +26,7 @@ func NewConfig() Config {
 		Browser: BrowserConfig{
 			Width:  envInt("BROWSER_WIDTH", 1440),
 			Height: envInt("BROWSER_HEIGHT", 900),
+			URL:    envString("BROWSER_URL", ""),
 		},
 		Storage: StorageConfig{
 			Type: envStorageType("STORAGE_TYPE", ""),

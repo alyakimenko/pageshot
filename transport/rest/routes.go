@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/alyakimenko/pageshot/models"
+	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 )
 
@@ -18,7 +19,7 @@ type ScreenshotService interface {
 
 // Handler is an REST HTTP handler.
 type Handler struct {
-	mux *http.ServeMux
+	router *mux.Router
 
 	logger            *logrus.Logger
 	screenshotService ScreenshotService
@@ -32,27 +33,29 @@ type HandlerParams struct {
 
 // NewHandler returns net http.Handler.
 func NewHandler(params HandlerParams) *Handler {
-	mux := http.NewServeMux()
+	router := mux.NewRouter()
 
 	handler := &Handler{
-		mux:               mux,
+		router:            router,
 		logger:            params.Logger,
 		screenshotService: params.ScreenshotService,
 	}
 
 	handler.initRoutes()
 
+	router.Use(handler.recovery)
+
 	return handler
 }
 
 // ServeHTTP satisfies the http.Handler interface.
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.mux.ServeHTTP(w, r)
+	h.router.ServeHTTP(w, r)
 }
 
 // initRoutes initializes all routes for the Handler.
 func (h *Handler) initRoutes() {
-	h.mux.HandleFunc("/screenshot", func(w http.ResponseWriter, r *http.Request) {
+	h.router.HandleFunc("/screenshot", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 
@@ -63,7 +66,7 @@ func (h *Handler) initRoutes() {
 	})
 
 	start := time.Now()
-	h.mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+	h.router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 

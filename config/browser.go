@@ -4,4 +4,5 @@ package config
 type BrowserConfig struct {
 	Width  int
 	Height int
+	URL    string
 }

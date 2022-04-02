@@ -16,6 +16,8 @@ Pageshot is a simple self-hosted tool that enables you to take a screenshot of a
 - Flexible scale and quality factors.
 - Cache screenshots with local file storage or S3.
 
+Demo is available at https://pageshot.herokuapp.com/. Try it [by taking a fullpage screenshot](https://pageshot.herokuapp.com/screenshot?url=https://news.ycombinator.com/) of [Hacker News](https://news.ycombinator.com/). The pageshot instance runs on a free Heroku dyno, so it might be slow.
+
 ## API
 
 `GET /screenshot`

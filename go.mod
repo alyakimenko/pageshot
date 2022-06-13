@@ -7,7 +7,7 @@ require (
 	github.com/chromedp/chromedp v0.8.2
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/schema v1.2.0
-	github.com/minio/minio-go/v7 v7.0.27
+	github.com/minio/minio-go/v7 v7.0.28
 	github.com/sirupsen/logrus v1.8.1
 )
 

@@ -16,7 +16,7 @@ COPY . .
 RUN CGO_ENABLED=0 go build -o bin/pageshot cmd/pageshot/main.go
 
 # final image
-FROM chromedp/headless-shell:102.0.5005.115
+FROM chromedp/headless-shell:103.0.5060.114
 
 # set maintainer label
 LABEL maintainer="Aleksandr Yakimenko <urlucidfall@gmail.com>"
